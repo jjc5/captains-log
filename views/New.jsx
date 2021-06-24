@@ -12,8 +12,6 @@ class New extends React.Component {
             <input type="submit" name="" value="Submit"/>
         </form>
       </div>
-
-
     )
   }
 }
