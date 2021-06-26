@@ -29,7 +29,9 @@ const methodOverride = require('method-override');
 app.use(methodOverride('_method'));
 
 
-
+app.get('/', (req, res) => {
+  res.send('Welcome to the Captains Log')
+})
 /*Index*/
 app.get('/logs', (req, res) => {
   Logs.find({}, (err, createdLogs) =>{
