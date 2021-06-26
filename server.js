@@ -57,6 +57,17 @@ app.delete('/logs/:id', (req, res)=>{
     });
 });
 /*Update*/
+app.put('/logs/:id', (req, res)=>{
+    if(req.body.shipIsBroken === 'on'){
+        req.body.shipIsBroken = true;
+    } else {
+        req.body.shipIsBroken = false;
+    }
+    Logs.findByIdAndUpdate(req.params.id, req.body, {new:true}, (err, updatedLog)=>{
+        res.redirect('/logs');
+    });
+});
+
 /*Create*/
 app.post('/logs', (req, res) => {
   if(req.body.shipIsBroken === 'on'){
@@ -76,6 +87,19 @@ app.post('/logs', (req, res) => {
   })
 })
 /*Edit*/
+app.get('/logs/:id/edit', (req, res) => {
+  Logs.findById(req.params.id, (err, editedLog) => {
+    if(err){
+      res.status(404).send({
+          msg: err.message
+      })
+    } else {
+      res.render('Edit', {
+        logs: editedLog
+      })
+    }
+  })
+})
 /*Show*/
 app.get('/logs/:id', (req, res) => {
   Logs.findById(req.params.id, (err, createdLogs)=>{
