@@ -51,6 +51,11 @@ app.get('/logs/new', (req, res) => {
 })
 
 /*Delete*/
+app.delete('/logs/:id', (req, res)=>{
+    Logs.findByIdAndRemove(req.params.id, (err, data)=>{
+        res.redirect('/logs');//redirect back to fruits index
+    });
+});
 /*Update*/
 /*Create*/
 app.post('/logs', (req, res) => {
