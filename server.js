@@ -13,7 +13,7 @@ mongoose.connect(process.env.MONGO_URI, {
   useFindAndModify: false,
 });
 
-mongoose.connection.once('open', () => {
+mongoose.connection.once('connected', () => {
   console.log('connected to mongo')
 })
 
@@ -25,10 +25,26 @@ app.use((req, res, next) => {
   next()
 })
 app.use(express.urlencoded({ extended: true }))
+const methodOverride = require('method-override');
+app.use(methodOverride('_method'));
 
 
 
 /*Index*/
+app.get('/logs', (req, res) => {
+  Logs.find({}, (err, createdLogs) =>{
+    if(err){
+      res.status(404).send({
+        msg: err.message
+      })
+    }else {
+      res.render('Index', {
+        logs: createdLogs
+      })
+    }
+  })
+})
+
 /*New*/
 app.get('/logs/new', (req, res) => {
   res.render('New')
@@ -43,7 +59,16 @@ app.post('/logs', (req, res) => {
   }else{
     req.body.shipIsBroken = false;
   }
-  res.send(req.body);
+  Logs.create(req.body, (err, createdLogs) => {
+    if(err){
+      res.status(404).send({
+        msg: err.message
+      })
+    }else{
+      console.log(createdLogs);
+      res.redirect('/logs')
+    }
+  })
 })
 /*Edit*/
 /*Show*/
